@@ -1,0 +1,10 @@
+pdbs/
+tmp_pdb/
+stride_out/
+contexts/
+final/
+.snakemake/
+__pycache__/
+*.pyc
+stride/
+.DS_Store
