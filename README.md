@@ -14,15 +14,46 @@ pip install biopython tqdm pandas numpy scipy matplotlib snakemake
 
 ## Running
 
-Put your `.pdb.gz` files in a folder, then:
+Put your `.pdb.gz` files in a folder.
 
+### Full pipeline (snakemake)
+
+```bash
+snakemake --cores 4 --keep-going --config target_aa=ARG pdb_dir=/path/to/pdbs
 ```
-bash scripts/run_all.sh /path/to/pdbs ARG
+
+This runs all 4 steps: STRIDE → context extraction → angle computation → plotting.
+
+### Run specific steps
+
+```bash
+# only secondary structure assignment
+snakemake --cores 4 --keep-going --until run_stride --config pdb_dir=/path/to/pdbs
+
+# only context extraction (needs stride output)
+snakemake --cores 4 --keep-going --until extract_context --config target_aa=ARG pdb_dir=/path/to/pdbs
+
+# only angles (needs contexts)
+snakemake --cores 4 --keep-going --until calculate_angles --config target_aa=ARG pdb_dir=/path/to/pdbs
+
+# only plot (needs angles.tsv)
+snakemake final/angle_plot.png --cores 4 --config target_aa=ARG pdb_dir=/path/to/pdbs
 ```
 
-Output goes to `final/`.
+### Run python scripts directly
 
-## Results
+```bash
+# extract contexts from a stride output
+python3 scripts/parse_stride.py stride_out/1abc.ss.out contexts/1abc.tsv ARG
+
+# compute angles from all contexts
+python3 scripts/calc_angles.py contexts/ final/angles.tsv ARG
+
+# generate plot
+python3 scripts/plot_angles.py
+```
+
+## Output
 
 - `final/angles.tsv` — all computed angles
 - `final/pdb_list.txt` — PDB IDs that contributed data
