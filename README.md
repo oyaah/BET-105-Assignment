@@ -24,21 +24,7 @@ snakemake --cores 4 --keep-going --config target_aa=ARG pdb_dir=/path/to/pdbs
 
 This runs all 4 steps: STRIDE → context extraction → angle computation → plotting.
 
-### Run specific steps
 
-```bash
-# only secondary structure assignment
-snakemake --cores 4 --keep-going --until run_stride --config pdb_dir=/path/to/pdbs
-
-# only context extraction (needs stride output)
-snakemake --cores 4 --keep-going --until extract_context --config target_aa=ARG pdb_dir=/path/to/pdbs
-
-# only angles (needs contexts)
-snakemake --cores 4 --keep-going --until calculate_angles --config target_aa=ARG pdb_dir=/path/to/pdbs
-
-# only plot (needs angles.tsv)
-snakemake final/angle_plot.png --cores 4 --config target_aa=ARG pdb_dir=/path/to/pdbs
-```
 
 ### Run python scripts directly
 
